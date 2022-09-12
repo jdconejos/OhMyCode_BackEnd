@@ -1,6 +1,7 @@
 package com.ohmycode.domain.controllers;
 
 import com.ohmycode.domain.models.Todo;
+import com.ohmycode.domain.models.User;
 import com.ohmycode.domain.repositories.TodoRepository;
 import com.ohmycode.domain.repositories.UserRepository;
 import com.ohmycode.rest.DTOs.DTOAddress;
@@ -9,16 +10,22 @@ import com.ohmycode.rest.DTOs.DTOUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoController {
 
     @Autowired
     private TodoRepository todoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<DTOTodo> getAllTodos() {
         List<DTOTodo> dtoTodoList = new ArrayList<>();
@@ -49,6 +56,20 @@ public class TodoController {
             dtoTodoList.add(newDTOTodo);
         }
         return dtoTodoList;
+
+    }
+
+    public void createTodo(String title, Boolean completed, Long userId) {
+
+        Optional<User> user = userRepository.findById(userId);
+        if(!user.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        Todo newTodo = new Todo();
+        newTodo.setTitle(title);
+        newTodo.setCompleted(completed);
+        newTodo.setUser(user.get());
+
+        todoRepository.save(newTodo);
 
     }
 }

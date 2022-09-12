@@ -2,6 +2,7 @@ package com.ohmycode.rest.services;
 
 import com.ohmycode.domain.controllers.TodoController;
 import com.ohmycode.rest.DTOs.DTOTodo;
+import com.ohmycode.rest.DTOs.TodoApiBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -45,13 +46,24 @@ public class Todo {
 
     @PutMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTodo(){
+    public void createTodo(@RequestBody TodoApiBody body){
+        //Revisar que userId > 0, que el titulo no esté vacío o con longitud >= 200, y que todos los parametros existen
+        if(body == null || body.getUserId() == null || body.getUserId() <= 0
+                || body.getTitle() == null || body.getTitle().length() <= 0 || body.getTitle().length() >= 200
+                || body.getCompleted() == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
+        todoController.createTodo(body.getTitle(), body.getCompleted(), body.getUserId());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void editTodos(){
+    public void editTodos(@RequestBody TodoApiBody body){
+        //Revisar que userId > 0; y que el titulo no esté vacío o con longitud >= 200, y que todos los parametros existen
+        if(body == null || body.getUserId() == null || body.getUserId() <= 0
+                || body.getTitle() == null || body.getTitle().length() <= 0 || body.getTitle().length() >= 200
+                || body.getCompleted() == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
     }
 

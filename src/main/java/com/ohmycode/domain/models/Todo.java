@@ -10,10 +10,10 @@ public class Todo implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="title")
+    @Column(name="title", nullable = false)
     private String title;
 
-    @Column(name="completed")
+    @Column(name="completed", nullable = false)
     private Boolean completed;
 
     @ManyToOne
