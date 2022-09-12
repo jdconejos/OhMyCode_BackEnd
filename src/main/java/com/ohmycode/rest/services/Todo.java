@@ -3,6 +3,7 @@ package com.ohmycode.rest.services;
 import com.ohmycode.domain.controllers.TodoController;
 import com.ohmycode.rest.DTOs.DTOTodo;
 import com.ohmycode.rest.DTOs.TodoApiBody;
+import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +59,7 @@ public class Todo {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void editTodos(@RequestBody TodoApiBody body){
+    public void editTodo(@RequestBody TodoApiBody body){
         //Revisar que userId > 0; y que el titulo no esté vacío o con longitud >= 200, y que todos los parametros existen
         if(body == null || body.getUserId() == null || body.getUserId() <= 0
                 || body.getTitle() == null || body.getTitle().length() <= 0 || body.getTitle().length() >= 200
@@ -67,6 +68,12 @@ public class Todo {
 
         todoController.editTodo(body.getId(), body.getTitle(), body.getCompleted(), body.getUserId());
 
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTodo(@RequestParam(value="id") Long id){
+        todoController.deleteTodo(id);
     }
 
 }

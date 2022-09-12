@@ -8,6 +8,7 @@ import com.ohmycode.rest.DTOs.DTOAddress;
 import com.ohmycode.rest.DTOs.DTOTodo;
 import com.ohmycode.rest.DTOs.DTOUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -85,5 +86,13 @@ public class TodoController {
         editTodo.setUser(user.get());
 
         todoRepository.save(editTodo);
+    }
+
+    public void deleteTodo(Long id) {
+        try {
+            todoRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }
