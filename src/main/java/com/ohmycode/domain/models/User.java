@@ -13,7 +13,7 @@ public class User implements Serializable {
     @Column(name="name")
     private String name;
 
-    @Column(name="username")
+    @Column(name="username", unique=true)
     private String username;
 
     @Column(name="password")
