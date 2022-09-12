@@ -62,8 +62,10 @@ public class Todo {
         //Revisar que userId > 0; y que el titulo no esté vacío o con longitud >= 200, y que todos los parametros existen
         if(body == null || body.getUserId() == null || body.getUserId() <= 0
                 || body.getTitle() == null || body.getTitle().length() <= 0 || body.getTitle().length() >= 200
-                || body.getCompleted() == null)
+                || body.getCompleted() == null || body.getId() == null || body.getId() < 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        todoController.editTodo(body.getId(), body.getTitle(), body.getCompleted(), body.getUserId());
 
     }
 

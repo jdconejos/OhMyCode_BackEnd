@@ -11,6 +11,11 @@ public interface TodoRepository extends CrudRepository<Todo, Long> {
     @Query("select t from Todo t order by t.id")
     List<Todo> findWithPage(Pageable pageable);
 
+    @Query("select t from Todo t order by t.id")
+    List<Todo> findAllOrdered();
+
+
+
 
 }
 

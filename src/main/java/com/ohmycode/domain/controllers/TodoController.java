@@ -29,9 +29,9 @@ public class TodoController {
 
     public List<DTOTodo> getAllTodos() {
         List<DTOTodo> dtoTodoList = new ArrayList<>();
-        Iterable<Todo> todoIterable = todoRepository.findAll();
+        List<Todo> todoList = todoRepository.findAllOrdered();
 
-        for(Todo todo : todoIterable) {
+        for(Todo todo : todoList) {
             DTOAddress newDTOAddress = new DTOAddress(todo.getUser().getAddress().getId(), todo.getUser().getAddress().getStreet(), todo.getUser().getAddress().getCity(), todo.getUser().getAddress().getZipcode(), todo.getUser().getAddress().getCountry());
             DTOUser newDTOUser = new DTOUser(todo.getUser().getId(), todo.getUser().getName(), todo.getUser().getUsername(), newDTOAddress);
             DTOTodo newDTOTodo = new DTOTodo(newDTOUser, todo.getId(), todo.getTitle(), todo.getCompleted());
@@ -71,5 +71,19 @@ public class TodoController {
 
         todoRepository.save(newTodo);
 
+    }
+
+    public void editTodo(Long todoId, String title, Boolean completed, Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<Todo> todo = todoRepository.findById(todoId);
+
+        if(!user.isPresent() || !todo.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        Todo editTodo = todo.get();
+        editTodo.setTitle(title);
+        editTodo.setCompleted(completed);
+        editTodo.setUser(user.get());
+
+        todoRepository.save(editTodo);
     }
 }
