@@ -3,9 +3,10 @@ package com.ohmycode.domain.models;
 import javax.persistence.*;
 import java.io.Serializable;
 
+//Se llama UserDao porque PostgreSQL no admite una tabla llamada "User"
 @Entity
 @Table(name = "user_entity")
-public class User implements Serializable {
+public class UserDao implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,10 +23,10 @@ public class User implements Serializable {
     @ManyToOne
     private Address address;
 
-    public User() {
+    public UserDao() {
     }
 
-    public User(Long id, String name, String username, String password, Address address) {
+    public UserDao(Long id, String name, String username, String password, Address address) {
         this.id = id;
         this.name = name;
         this.username = username;

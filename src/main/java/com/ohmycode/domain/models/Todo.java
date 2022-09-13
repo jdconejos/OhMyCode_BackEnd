@@ -17,16 +17,16 @@ public class Todo implements Serializable {
     private Boolean completed;
 
     @ManyToOne
-    private User user;
+    private UserDao userDao;
 
     public Todo() {
     }
 
-    public Todo(Long id, String title, Boolean completed, User user) {
+    public Todo(Long id, String title, Boolean completed, UserDao userDao) {
         this.id = id;
         this.title = title;
         this.completed = completed;
-        this.user = user;
+        this.userDao = userDao;
     }
 
     public String getTitle() {
@@ -45,12 +45,12 @@ public class Todo implements Serializable {
         this.completed = completed;
     }
 
-    public User getUser() {
-        return user;
+    public UserDao getUser() {
+        return userDao;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public Long getId() {

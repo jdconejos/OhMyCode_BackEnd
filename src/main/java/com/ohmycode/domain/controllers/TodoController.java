@@ -1,7 +1,7 @@
 package com.ohmycode.domain.controllers;
 
 import com.ohmycode.domain.models.Todo;
-import com.ohmycode.domain.models.User;
+import com.ohmycode.domain.models.UserDao;
 import com.ohmycode.domain.repositories.TodoRepository;
 import com.ohmycode.domain.repositories.UserRepository;
 import com.ohmycode.rest.DTOs.DTOAddress;
@@ -62,7 +62,7 @@ public class TodoController {
 
     public void createTodo(String title, Boolean completed, Long userId) {
 
-        Optional<User> user = userRepository.findById(userId);
+        Optional<UserDao> user = userRepository.findById(userId);
         if(!user.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         Todo newTodo = new Todo();
@@ -75,7 +75,7 @@ public class TodoController {
     }
 
     public void editTodo(Long todoId, String title, Boolean completed, Long userId) {
-        Optional<User> user = userRepository.findById(userId);
+        Optional<UserDao> user = userRepository.findById(userId);
         Optional<Todo> todo = todoRepository.findById(todoId);
 
         if(!user.isPresent() || !todo.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);

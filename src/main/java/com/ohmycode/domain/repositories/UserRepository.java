@@ -1,7 +1,8 @@
 package com.ohmycode.domain.repositories;
 
-import com.ohmycode.domain.models.User;
+import com.ohmycode.domain.models.UserDao;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<UserDao, Long> {
+    UserDao findByUsername(String username);
 }
