@@ -27,6 +27,6 @@ insert into todos values(16, false, 'todo6', 3);
 insert into todos values(17, true, 'todo7', 4);
 ````
 
-Los usuarios de este juego de pruebas se han creado con username: `user1` - `user4`, todos con la contraseña: `admin`
+Los usuarios de este juego de pruebas se han creado con username: `user1` - `user4`, todos con la contraseña: `admin`. Para hacer el login habrá que ingresar el *username*, no el nombre.
 
 Se han implementado todos las funcionaliades indicadas por el documento, incluyendo las funcionalidades bonus.
