@@ -7,7 +7,7 @@ Se ha utilizado una base de datos **postgreSQL**. Será necesario crear una nuev
 
 Dentro de `src/main/resources/application.properties` habrá que indicar el usuario y contraseña de la base de datos, en los atributos de `spring.datasource.username` y `spring.datasource.password` respectivamente.
 
-Una vez configurado el sistema, se tendrá que ejecutar para crear las tablas de la base de datos. Estas tablas estarán vacias. Se ha creado un pequeño juego de pruebas para poder demostrar el funcionamiento del servidor. Para incorporar estos datos en la base de datos, se tendrá que ejecutar las siguientes sentencias directamente en la base de datos:
+Una vez configurado el sistema, se tendrá que ejecutar para crear las tablas de la base de datos. Estas tablas estarán vacías. Se ha creado un pequeño juego de pruebas para poder demostrar el funcionamiento del servidor. Para incorporar estos datos en la base de datos, se tendrá que ejecutar las siguientes sentencias directamente en la base de datos:
 
 ````
 insert into address values(1, 'barcelona', 'españa', 'ramblas', '11111');
@@ -27,6 +27,6 @@ insert into todos values(16, false, 'todo6', 3);
 insert into todos values(17, true, 'todo7', 4);
 ````
 
-Los usuarios de este juego de pruebas se han creado con username: `user1` - `user4`, todos con la contraseña: `admin`. Para hacer el login habrá que ingresar el *username*, no el nombre.
+Los usuarios de este juego de pruebas se han creado con username: 'user1' - 'user4', todos con la contraseña: 'admin'. Para hacer el login habrá que ingresar el *username*, no el nombre.
 
-Se han implementado todos las funcionaliades indicadas por el documento, incluyendo las funcionalidades bonus.
+Se han implementado todos las funcionalidades indicadas por el documento, incluyendo las funcionalidades bonus.
