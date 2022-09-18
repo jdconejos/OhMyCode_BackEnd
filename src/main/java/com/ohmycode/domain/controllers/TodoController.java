@@ -32,35 +32,31 @@ public class TodoController {
         List<DTOTodo> dtoTodoList = new ArrayList<>();
         List<Todo> todoList = todoRepository.findAllOrdered();
 
-        for(Todo todo : todoList) {
-            DTOAddress newDTOAddress = new DTOAddress(todo.getUser().getAddress().getId(), todo.getUser().getAddress().getStreet(), todo.getUser().getAddress().getCity(), todo.getUser().getAddress().getZipcode(), todo.getUser().getAddress().getCountry());
-            DTOUser newDTOUser = new DTOUser(todo.getUser().getId(), todo.getUser().getName(), todo.getUser().getUsername(), newDTOAddress);
-            DTOTodo newDTOTodo = new DTOTodo(newDTOUser, todo.getId(), todo.getTitle(), todo.getCompleted());
-
-            dtoTodoList.add(newDTOTodo);
-        }
-        return dtoTodoList;
+        return getDtoTodos(dtoTodoList, todoList);
     }
 
-    public List<DTOTodo> getTodosWithPage(int pageNumber, int pageLength) {
+    public List<DTOTodo> getTodosByUsername(String username) {
+        List<DTOTodo> dtoTodoList = new ArrayList<>();
+        List<Todo> todoList = todoRepository.findByUserDao_UsernameOrderByIdAsc(username);
+
+        return getDtoTodos(dtoTodoList, todoList);
+    }
+
+    public List<DTOTodo> getTodosWithPage(int pageNumber, int pageLength, String username) {
 
         Pageable page = PageRequest.of(pageNumber, pageLength);
 
         List<DTOTodo> dtoTodoList = new ArrayList<>();
-        Iterable<Todo> todoIterable = todoRepository.findWithPage(page);
+        List<Todo> todoList = new ArrayList<>();
 
-        for(Todo todo : todoIterable) {
-            DTOAddress newDTOAddress = new DTOAddress(todo.getUser().getAddress().getId(), todo.getUser().getAddress().getStreet(), todo.getUser().getAddress().getCity(), todo.getUser().getAddress().getZipcode(), todo.getUser().getAddress().getCountry());
-            DTOUser newDTOUser = new DTOUser(todo.getUser().getId(), todo.getUser().getName(), todo.getUser().getUsername(), newDTOAddress);
-            DTOTodo newDTOTodo = new DTOTodo(newDTOUser, todo.getId(), todo.getTitle(), todo.getCompleted());
+        if(username == null) todoList = todoRepository.findWithPage(page);
+        else todoList = todoRepository.findByUserDao_UsernameWithPageOrderByIdAsc(page, username);
 
-            dtoTodoList.add(newDTOTodo);
-        }
-        return dtoTodoList;
+        return getDtoTodos(dtoTodoList, todoList);
 
     }
 
-    public void createTodo(String title, Boolean completed, Long userId) {
+    public DTOTodo createTodo(String title, Boolean completed, Long userId) {
 
         Optional<UserDao> user = userRepository.findById(userId);
         if(!user.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -70,22 +66,34 @@ public class TodoController {
         newTodo.setCompleted(completed);
         newTodo.setUser(user.get());
 
-        todoRepository.save(newTodo);
+        Todo todo = todoRepository.save(newTodo);
+
+        DTOAddress newDTOAddress = new DTOAddress(todo.getUser().getAddress().getId(), todo.getUser().getAddress().getStreet(), todo.getUser().getAddress().getCity(), todo.getUser().getAddress().getZipcode(), todo.getUser().getAddress().getCountry());
+        DTOUser newDTOUser = new DTOUser(todo.getUser().getId(), todo.getUser().getName(), todo.getUser().getUsername(), newDTOAddress);
+        DTOTodo newDTOTodo = new DTOTodo(newDTOUser, todo.getId(), todo.getTitle(), todo.getCompleted());
+
+        return newDTOTodo;
 
     }
 
-    public void editTodo(Long todoId, String title, Boolean completed, Long userId) {
+    public DTOTodo editTodo(Long todoId, String title, Boolean completed, Long userId) {
         Optional<UserDao> user = userRepository.findById(userId);
-        Optional<Todo> todo = todoRepository.findById(todoId);
+        Optional<Todo> findTodo = todoRepository.findById(todoId);
 
-        if(!user.isPresent() || !todo.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if(!user.isPresent() || !findTodo.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        Todo editTodo = todo.get();
+        Todo editTodo = findTodo.get();
         editTodo.setTitle(title);
         editTodo.setCompleted(completed);
         editTodo.setUser(user.get());
 
-        todoRepository.save(editTodo);
+        Todo todo = todoRepository.save(editTodo);
+
+        DTOAddress newDTOAddress = new DTOAddress(todo.getUser().getAddress().getId(), todo.getUser().getAddress().getStreet(), todo.getUser().getAddress().getCity(), todo.getUser().getAddress().getZipcode(), todo.getUser().getAddress().getCountry());
+        DTOUser newDTOUser = new DTOUser(todo.getUser().getId(), todo.getUser().getName(), todo.getUser().getUsername(), newDTOAddress);
+        DTOTodo newDTOTodo = new DTOTodo(newDTOUser, todo.getId(), todo.getTitle(), todo.getCompleted());
+
+        return newDTOTodo;
     }
 
     public void deleteTodo(Long id) {
@@ -94,5 +102,17 @@ public class TodoController {
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+    }
+
+    //Transforms a Todo object to a DtoTodo
+    private List<DTOTodo> getDtoTodos(List<DTOTodo> dtoTodoList, List<Todo> todoList) {
+        for(Todo todo : todoList) {
+            DTOAddress newDTOAddress = new DTOAddress(todo.getUser().getAddress().getId(), todo.getUser().getAddress().getStreet(), todo.getUser().getAddress().getCity(), todo.getUser().getAddress().getZipcode(), todo.getUser().getAddress().getCountry());
+            DTOUser newDTOUser = new DTOUser(todo.getUser().getId(), todo.getUser().getName(), todo.getUser().getUsername(), newDTOAddress);
+            DTOTodo newDTOTodo = new DTOTodo(newDTOUser, todo.getId(), todo.getTitle(), todo.getCompleted());
+
+            dtoTodoList.add(newDTOTodo);
+        }
+        return dtoTodoList;
     }
 }
