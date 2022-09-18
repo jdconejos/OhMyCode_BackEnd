@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/todo")
+@RequestMapping("/todos")
 public class Todo {
 
     private final int DEFAULT_PAGE_LENGTH = 10;
